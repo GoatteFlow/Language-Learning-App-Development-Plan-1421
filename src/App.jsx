@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard';
 import Lesson from './pages/Lesson';
 import Profile from './pages/Profile';
 import Pricing from './pages/Pricing';
+import Payment from './pages/Payment';
 import VoiceChat from './pages/VoiceChat';
 import './App.css';
 
@@ -27,6 +28,7 @@ function App() {
                   <Route path="/lesson/:lessonId" element={<Lesson />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/payment" element={<Payment />} />
                   <Route path="/voice-chat" element={<VoiceChat />} />
                 </Routes>
               </AnimatePresence>

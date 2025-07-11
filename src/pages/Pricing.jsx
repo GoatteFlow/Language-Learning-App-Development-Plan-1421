@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext';
 import SafeIcon from '../common/SafeIcon';
 import * as FiIcons from 'react-icons/fi';
@@ -7,6 +8,7 @@ import * as FiIcons from 'react-icons/fi';
 const { FiCheck, FiStar, FiZap, FiMic, FiTrendingUp, FiUsers, FiHeadphones, FiDownload } = FiIcons;
 
 const Pricing = () => {
+  const navigate = useNavigate();
   const { user, updateUser } = useUser();
 
   const plans = [
@@ -73,9 +75,13 @@ const Pricing = () => {
   ];
 
   const handleSubscribe = (planId) => {
-    updateUser({ subscription: planId });
-    // In a real app, this would integrate with a payment processor
-    alert(`Successfully subscribed to ${planId} plan!`);
+    if (planId === 'free') {
+      updateUser({ subscription: planId });
+      alert('You are now on the Free plan!');
+    } else {
+      // Navigate to payment page
+      navigate('/payment', { state: { selectedPlan: planId } });
+    }
   };
 
   const comparisonFeatures = [
@@ -128,25 +134,25 @@ const Pricing = () => {
                   Most Popular - {plan.savings}
                 </div>
               )}
-
+              
               <div className={`p-8 ${plan.popular ? 'pt-16' : ''}`}>
                 <div className="text-center mb-6">
                   <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
-                    plan.popular 
-                      ? 'bg-white/20' 
-                      : plan.color === 'gray' 
-                      ? 'bg-gray-100' 
+                    plan.popular
+                      ? 'bg-white/20'
+                      : plan.color === 'gray'
+                      ? 'bg-gray-100'
                       : 'bg-purple-100'
                   }`}>
-                    <SafeIcon 
-                      icon={plan.icon} 
+                    <SafeIcon
+                      icon={plan.icon}
                       className={`w-8 h-8 ${
-                        plan.popular 
-                          ? 'text-white' 
-                          : plan.color === 'gray' 
-                          ? 'text-gray-600' 
+                        plan.popular
+                          ? 'text-white'
+                          : plan.color === 'gray'
+                          ? 'text-gray-600'
                           : 'text-purple-600'
-                      }`} 
+                      }`}
                     />
                   </div>
                   <h3 className="text-2xl font-bold mb-2">{plan.name}</h3>
@@ -174,9 +180,7 @@ const Pricing = () => {
                     <li key={featureIndex} className="flex items-center space-x-3">
                       <SafeIcon
                         icon={FiCheck}
-                        className={`w-5 h-5 ${
-                          plan.popular ? 'text-white' : 'text-green-500'
-                        }`}
+                        className={`w-5 h-5 ${plan.popular ? 'text-white' : 'text-green-500'}`}
                       />
                       <span className="text-sm">{feature}</span>
                     </li>
@@ -194,12 +198,11 @@ const Pricing = () => {
                       : 'bg-purple-600 text-white hover:bg-purple-700'
                   }`}
                 >
-                  {user?.subscription === plan.id 
-                    ? 'Current Plan' 
-                    : plan.id === 'free' 
-                    ? 'Get Started' 
-                    : 'Subscribe Now'
-                  }
+                  {user?.subscription === plan.id
+                    ? 'Current Plan'
+                    : plan.id === 'free'
+                    ? 'Get Started'
+                    : 'Subscribe Now'}
                 </button>
               </div>
             </motion.div>
@@ -217,7 +220,6 @@ const Pricing = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
               Feature Comparison
             </h2>
-            
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -253,7 +255,6 @@ const Pricing = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-8">
             Why Choose LinguaForge?
           </h2>
-          
           <div className="grid md:grid-cols-4 gap-8">
             {[
               { icon: FiMic, title: 'AI Voice Tutor', desc: 'Practice with advanced AI' },
